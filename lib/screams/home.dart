@@ -29,6 +29,13 @@ class _HomeState extends State<Home> {
     });
   }
 
+  @override
+  void didUpdateWidget(Home oldWidget) {
+    passCardList = List();
+    getTarjetas();
+    super.didUpdateWidget(oldWidget);
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -60,13 +67,15 @@ class _HomeState extends State<Home> {
         return AddTarjeta(context);
       },
     ).then((p){
-          print(p);
+      if (p != null){
+          var newcard = p as PassCardModel;
+          var newlist = passCardList;
+          newlist.add(newcard);
+          print("tarejta agregada: ${newcard.name}");
           setState(() {
-            if (p != null){
-                passCardList.add(p);
-            }
-            
+            passCardList = newlist;
           });
+      }
     });
     
   }

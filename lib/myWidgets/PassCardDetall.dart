@@ -4,6 +4,7 @@ import 'package:saldocontrol/model/PassCardModel.dart';
 import 'package:saldocontrol/repository/repository_service_tarjetadb.dart';
 import 'package:saldocontrol/screams/AddSaldo.dart';
 import 'package:saldocontrol/screams/AddViaje.dart';
+import 'package:saldocontrol/screams/EditCard.dart';
 
 class PassCardDetall extends StatefulWidget {
   final PassCardModel passcard;
@@ -51,15 +52,23 @@ class _PassCardDetallState extends State<PassCardDetall> {
               child: Column(
                 children: <Widget>[
                   GestureDetector(
-                    onLongPress: () => widget.deleteCard(passCardModel),
+                    onLongPress: (){
+                      Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => EditCard(title: passCardModel.name,passCardModel: passCardModel,)),
+                          );
+                    },
                     child: Stack(
                       children: <Widget>[
-                        Image.asset(
+                        Hero(
+                          tag: 'imageHero_${passCardModel.id}',
+                          child:Image.asset(
                           passCardModel.img,
                           height: 200.0,
                           width: MediaQuery.of(context).size.width,
                           fit: BoxFit.cover,
-                        ),
+                        ))
+                        ,
                         Positioned(
                           left: 0.0,
                           bottom: 0.0,

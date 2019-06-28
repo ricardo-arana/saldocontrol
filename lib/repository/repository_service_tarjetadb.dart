@@ -46,11 +46,13 @@ class RepositoryServiceTarjeta{
   static Future<void> updateTodo(PassCardModel todo) async {
     final sql = '''UPDATE ${TarjetaTable.tableName}
     SET ${TarjetaTable.name} = ? ,
+        ${TarjetaTable.img}  = ? ,
+        ${TarjetaTable.code}  = ? ,
         ${TarjetaTable.balance} = ?
     WHERE ${TarjetaTable.id} = ?
     ''';
 
-    List<dynamic> params = [todo.name,todo.balance , todo.id];
+    List<dynamic> params = [todo.name,todo.img,todo.code,todo.balance , todo.id];
     final result = await db.rawUpdate(sql, params);
 
     DatabaseCreator.databaseLog('Update todo', sql, null, result, params);
