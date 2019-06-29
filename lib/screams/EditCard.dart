@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:saldocontrol/common/Constanst.dart';
 import 'package:saldocontrol/model/PassCardModel.dart';
+import 'package:saldocontrol/myWidgets/Loading.dart';
 import 'package:saldocontrol/repository/repository_service_tarjetadb.dart';
 
 
@@ -94,15 +95,8 @@ class _EditCardState extends State<EditCard> {
   @override
   Widget build(BuildContext context) {
 
-    return new Scaffold(
-      appBar: new AppBar(
-       
-        title: new Text("Hello"),
-      ),
-      body: new Center(
-          
-          child: 
-            new Container(
+    return Container(
+              color: Colors.white,
               child:
              CustomScrollView(
               controller: _controller,
@@ -167,21 +161,25 @@ class _EditCardState extends State<EditCard> {
         Container(height: 10,),
         Row(children: <Widget>[
           Expanded(child: 
-          RaisedButton(child: Text("Guardar"),
+          RaisedButton(child: Text("Guardar", style: TextStyle(color: Colors.white,),),
           onPressed: updateCard,
           color: Colors.blueAccent,
           ),
           ),
           Expanded(child: 
-          RaisedButton(child: Text("Cancelar"),
+          RaisedButton(child: Text("Cancelar", style: TextStyle(color: Colors.white,),),
           onPressed: () => Navigator.of(context).pop(),
-          color: Colors.greenAccent,)
+          color: Colors.green,)
           ,)
           
         ],),
-        RaisedButton(child: Text("Eliminar tarjeta"),
-        onPressed: deleteCard,
-          color: Colors.redAccent),
+        Row(children: <Widget>[
+          Expanded(
+          child: RaisedButton(child: Text("Eliminar tarjeta", style: TextStyle(color: Colors.white,),),
+          onPressed: deleteCard,
+            color: Colors.redAccent),
+        )
+        ],),
       ],),
                       ),
                     ),
@@ -189,9 +187,7 @@ class _EditCardState extends State<EditCard> {
                 )             
                 ],
               ),
-            ),
-      ),
-    );
+            );
   }
 
   void updateCard(){
@@ -202,7 +198,8 @@ class _EditCardState extends State<EditCard> {
                                 "balance" : double.parse(balanceControler.text)
                                 });
     RepositoryServiceTarjeta.updateTodo(newCard).then((t){
-      Navigator.of(context).pop();
+       Route route = MaterialPageRoute(builder: (context) => Loading());
+       Navigator.pushReplacement(context, route);
     });
   }
 
@@ -214,7 +211,8 @@ class _EditCardState extends State<EditCard> {
                                 "balance" : double.parse(balanceControler.text)
                                 });
     RepositoryServiceTarjeta.deleteTarjeta(newCard).then((t){
-      Navigator.of(context).pop();
+      Route route = MaterialPageRoute(builder: (context) => Loading());
+      Navigator.pushReplacement(context, route);
     });
   }
 }

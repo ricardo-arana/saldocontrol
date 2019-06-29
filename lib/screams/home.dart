@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:saldocontrol/model/PassCardModel.dart';
+import 'package:saldocontrol/myWidgets/Loading.dart';
 import 'package:saldocontrol/myWidgets/PassCards.dart';
 import 'package:saldocontrol/repository/repository_service_tarjetadb.dart';
 import 'package:saldocontrol/screams/AddTarjeta.dart';
@@ -67,15 +68,10 @@ class _HomeState extends State<Home> {
         return AddTarjeta(context);
       },
     ).then((p){
-      if (p != null){
-          var newcard = p as PassCardModel;
-          var newlist = passCardList;
-          newlist.add(newcard);
-          print("tarejta agregada: ${newcard.name}");
-          setState(() {
-            passCardList = newlist;
-          });
-      }
+      Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Loading()),
+                          );
     });
     
   }

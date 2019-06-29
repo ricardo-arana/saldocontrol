@@ -22,11 +22,14 @@ class _PassCardsState extends State<PassCards> {
     print("cantidad de tarjetas: ${widget.passCardList.length}");
     super.initState();
     getlist();
+    print("passCardModelList: ${passCardModelList.length}");
   }
 
-  void getlist() {
+  Future getlist() async {
+    var data = await RepositoryServiceTarjeta.getAllTarjetas();
+    passCardModelList = List();
     setState(() {
-      passCardModelList = widget.passCardList;
+      passCardModelList.addAll(data);
     });
   }
 
