@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:path/path.dart';
 import 'package:saldocontrol/common/Constanst.dart';
+import 'package:saldocontrol/repository/tables/DebitoTable.dart';
 import 'package:saldocontrol/repository/tables/TarjetaTable.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -39,6 +40,21 @@ class DatabaseCreator{
 
   }
 
+  Future<void> createDebitoTable(Database db) async {
+    
+    final debitoSql = '''CREATE TABLE ${DebitoTable.tableName}
+    (
+      ${DebitoTable.id} INTEGER PRIMARY KEY,
+      ${DebitoTable.name} TEXT,
+      ${DebitoTable.hora} TEXT,
+      ${DebitoTable.idCard} INTEGER,
+      ${DebitoTable.dias} TEXT
+    )''';
+
+    await db.execute(debitoSql);
+
+  }
+
   Future<String> getDatabasePath(String dbName) async {
     final databasePath = await getDatabasesPath();
     final path = join(databasePath, dbName);
@@ -60,6 +76,7 @@ class DatabaseCreator{
 
   Future<void> onCreate(Database db, int version) async {
     await createTodoTable(db);
+    await createDebitoTable(db);
   }
 
 

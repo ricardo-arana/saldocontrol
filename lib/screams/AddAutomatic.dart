@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:intl/intl.dart';
 import 'package:saldocontrol/common/Constanst.dart';
+import 'package:saldocontrol/model/DebitoAutoModel.dart';
 import 'package:saldocontrol/model/PassCardModel.dart';
+import 'package:saldocontrol/repository/repository_service_debitodb.dart';
 import 'package:saldocontrol/repository/repository_service_tarjetadb.dart';
 
 class AddAutomatic extends StatefulWidget {
@@ -15,6 +17,7 @@ class _AddAutomaticState extends State<AddAutomatic> {
   final formats = {
     InputType.time: DateFormat("HH:mm"),
   };
+  TextEditingController titleController = TextEditingController();
   InputType inputType = InputType.time;
   bool editable = true;
   DateTime date;
@@ -37,9 +40,6 @@ class _AddAutomaticState extends State<AddAutomatic> {
     super.initState();
   }
 
-
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,11 +53,11 @@ class _AddAutomaticState extends State<AddAutomatic> {
             child: Column(children: <Widget>[
               TextField(
                 decoration: InputDecoration(hintText: "Titulo"),
+                controller: titleController,
               ),
               Text("Días de la semana"),
-              Wrap(children: 
-                diasSemanaWidget(),
-
+              Wrap(
+                children: diasSemanaWidget(),
               ),
               DateTimePickerFormField(
                 inputType: inputType,
@@ -69,46 +69,48 @@ class _AddAutomaticState extends State<AddAutomatic> {
               ),
               FutureBuilder(
                 future: RepositoryServiceTarjeta.getAllTarjetas(),
-                builder: (BuildContext context,AsyncSnapshot<List<PassCardModel>> snapshot){
-                  if(snapshot.hasData){
-                      return DropdownButton<PassCardModel>(
-                        items: snapshot.data.map<DropdownMenuItem<PassCardModel>>(
-                          (PassCardModel value){
-                            return DropdownMenuItem<PassCardModel>(
-                              value: value,
-                              child: Text(value.name),
-                            );
-                          }
-                        ).toList(),
-                        onChanged: (value){
-                          setState(() {
-                            _cardSelected = value;
-                          });
-                        },
-                        isExpanded: false,
-                    hint: Text('Seleccciona tarjeta'),
-                        
-                      );
-                  }else{
+                builder: (BuildContext context,
+                    AsyncSnapshot<List<PassCardModel>> snapshot) {
+                  if (snapshot.hasData) {
+                    return DropdownButton<PassCardModel>(
+                      items: snapshot.data.map<DropdownMenuItem<PassCardModel>>(
+                          (PassCardModel value) {
+                        return DropdownMenuItem<PassCardModel>(
+                          value: value,
+                          child: Text(value.name),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _cardSelected = value;
+                        });
+                      },
+                      isExpanded: false,
+                      hint: Text('Seleccciona tarjeta'),
+                    );
+                  } else {
                     return CircularProgressIndicator();
                   }
                 },
               ),
               SizedBox(
                 height: 150,
-                width:  230,
+                width: 230,
                 child: Card(
-                  child: 
-                   _cardSelected != null ? Image.asset(_cardSelected.img) : 
-                   Center(child: Text("No hay tarjeta selecionada"),) ,
+                  child: _cardSelected != null
+                      ? Image.asset(_cardSelected.img)
+                      : Center(
+                          child: Text("No hay tarjeta selecionada"),
+                        ),
                 ),
               ),
               RaisedButton(
                 color: Colors.blue,
-                child: Text("Guardar",style: TextStyle(color: Colors.white),),
-                onPressed: (){
-
-                },
+                child: Text(
+                  "Guardar",
+                  style: TextStyle(color: Colors.white),
+                ),
+                onPressed: () => guardarDebito(),
               )
             ]),
           ),
@@ -138,35 +140,45 @@ class _AddAutomaticState extends State<AddAutomatic> {
   }
 
   List<DropdownMenuItem<PassCardModel>> getDropDownMenuItems() {
-    
     List<DropdownMenuItem<PassCardModel>> items = new List();
     for (PassCardModel passcard in _listPassCard) {
       items.add(new DropdownMenuItem(
-          value: passcard,
-          child: new Text(passcard.name)
-      ));
+          value: passcard, child: new Text(passcard.name)));
     }
     return items;
   }
 
-  List<Widget> diasSemanaWidget(){
+  List<Widget> diasSemanaWidget() {
     var returnWidget = List<SizedBox>();
-    Constanst.diasDeSemana.forEach((k,v){
+    Constanst.diasDeSemana.forEach((k, v) {
       returnWidget.add(SizedBox(
-                  height: _sizebuttonday,
-                  width: _sizebuttonday,
-                  child: FloatingActionButton(
-                    backgroundColor: _colorsButton[k],
-                    child: Text(
-                      v,
-                      style: TextStyle(fontSize: 12),
-                    ),
-                    mini: true,
-                    onPressed: () => addday(k),
-                    heroTag: null,
-                  ),
-                ));
+        height: _sizebuttonday,
+        width: _sizebuttonday,
+        child: FloatingActionButton(
+          backgroundColor: _colorsButton[k],
+          child: Text(
+            v,
+            style: TextStyle(fontSize: 12),
+          ),
+          mini: true,
+          onPressed: () => addday(k),
+          heroTag: null,
+        ),
+      ));
     });
     return returnWidget;
+  }
+
+  guardarDebito() async {
+    var newId = await RepositoryServiceDebitoDb.getNewId().toString();
+    var data= DebitoAutoModel({ 
+                                "id" : newId,
+                                "name" : titleController.text,
+                                "hora" : "${date.hour}:${date.minute}",
+                                "idcard" : _cardSelected.id.toString(),
+                                "dias" : _daysSelected.join(",")});
+    RepositoryServiceDebitoDb.addDebito(data).then((t){
+        Navigator.of(context).pop();
+    });
   }
 }
