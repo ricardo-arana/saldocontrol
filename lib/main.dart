@@ -15,17 +15,15 @@ Future<void> main() async {
   final int oneShotID = 1;
 
   // Start the AlarmManager service.
-  await AndroidAlarmManager.initialize();
-
-  printMessage("main run");
+  //await AndroidAlarmManager.initialize();
   await DatabaseCreator().initDatabase();
   runApp(MyApp());
 
-  await AndroidAlarmManager.periodic(
+  /*await AndroidAlarmManager.periodic(
       const Duration(seconds: 5), periodicID, printPeriodic,
       wakeup: true);
   await AndroidAlarmManager.oneShot(
-      const Duration(seconds: 5), oneShotID, printOneShot);
+      const Duration(seconds: 5), oneShotID, printOneShot); */
   
 }
 

@@ -1,4 +1,6 @@
 PODS:
+  - android_alarm_manager (0.0.1):
+    - Flutter
   - Flutter (1.0.0)
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
@@ -8,6 +10,7 @@ PODS:
     - FMDB (~> 2.7.2)
 
 DEPENDENCIES:
+  - android_alarm_manager (from `.symlinks/plugins/android_alarm_manager/ios`)
   - Flutter (from `.symlinks/flutter/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
 
@@ -16,12 +19,15 @@ SPEC REPOS:
     - FMDB
 
 EXTERNAL SOURCES:
+  android_alarm_manager:
+    :path: ".symlinks/plugins/android_alarm_manager/ios"
   Flutter:
     :path: ".symlinks/flutter/ios"
   sqflite:
     :path: ".symlinks/plugins/sqflite/ios"
 
 SPEC CHECKSUMS:
+  android_alarm_manager: 4c223e7b3e0d6da3e73e12de10bf1369fab24957
   Flutter: 58dd7d1b27887414a370fcccb9e645c08ffd7a6a
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   sqflite: ff1d9da63c06588cc8d1faf7256d741f16989d5a

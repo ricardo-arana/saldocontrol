@@ -3,6 +3,7 @@ import 'package:saldocontrol/model/PassCardModel.dart';
 import 'package:saldocontrol/myWidgets/Loading.dart';
 import 'package:saldocontrol/myWidgets/PassCards.dart';
 import 'package:saldocontrol/repository/repository_service_tarjetadb.dart';
+import 'package:saldocontrol/screams/AddRecordatorio.dart';
 import 'package:saldocontrol/screams/AddTarjeta.dart';
 
 class Home extends StatefulWidget {
@@ -42,6 +43,30 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("Mis tarjetas"),),
+      drawer: Drawer(
+        child: ListView(
+          children: <Widget>[
+            DrawerHeader(child: Material(),),
+            ListTile(
+              title: Text("Agregar Tarjeta"),
+              trailing: Icon(Icons.credit_card),
+              onTap: ()=> _showDialog(context),
+            ),
+            Divider(height: 5.0,),
+            ListTile(
+              title: Text("Viajes Recuerrentes"),
+              trailing: Icon(Icons.event_note),
+              onTap: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AddRecordatorio()),
+                );
+              },
+            ),
+            Divider(height: 5.0,),
+          ],
+        ),
+      ),
       body: Container(
         child:
           Column(children: <Widget>[

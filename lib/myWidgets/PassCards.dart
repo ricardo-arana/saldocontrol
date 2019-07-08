@@ -55,7 +55,32 @@ class _PassCardsState extends State<PassCards> {
 
       return carouselSlider;
     } else {
-      return Text("No hay tarjetas. Agrega una nueva :D");
+      return SizedBox(
+        height: 200,
+        width: MediaQuery.of(context).size.width,
+        child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+            side: BorderSide(width: 1, color: Colors.grey),
+          ),
+          color: Colors.grey[200],
+          child: Center(
+            child: Container(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Icon(
+                    Icons.add_circle_outline,
+                    size: 50,
+                  ),
+                  Text("Agrega una nueva tarjeta")
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
     }
   }
 

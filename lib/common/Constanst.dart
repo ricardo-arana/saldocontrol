@@ -35,4 +35,13 @@ class Constanst{
                                                   "Tren Electrico Escolar" : [0.75],
                                                   "Otros" : [2.5,1.7,1.0]
                                                 };
+  
+  static const Map<int,String> diasDeSemana = { 1 : "L",
+                                                2 : "M" ,
+                                                3 : "X",
+                                                4 : "J",
+                                                5 : "V",
+                                                6 : "S",
+                                                7 : "D" 
+                                                };
 }
